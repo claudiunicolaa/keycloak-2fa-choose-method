@@ -9,5 +9,8 @@ Available methods are:
 - v16.1.0
 
 ### Configuration
+To be added:
+![alt text](https://i.ibb.co/mJQ5mSw/image-6.png)
+
 
 ### Deployment
