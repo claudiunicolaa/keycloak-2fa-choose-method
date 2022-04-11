@@ -1,1 +1,1 @@
-claudiunicolaa.keycloak.authenticator.MultipleEnrollmentTwoFactorAuthenticatorFactory
+claudiunicolaa.keycloak.authenticator.TwoFactorChooseMethodAuthenticatorFactory
