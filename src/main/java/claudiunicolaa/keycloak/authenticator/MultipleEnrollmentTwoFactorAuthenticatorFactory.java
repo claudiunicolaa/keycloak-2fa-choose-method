@@ -18,7 +18,7 @@ public class MultipleEnrollmentTwoFactorAuthenticatorFactory implements Authenti
 
 	@Override
 	public String getId() {
-		return "multiple-enrollment-two-factor-authenticator";
+		return "multiple-enrl-2fa-authenticator";
 	}
 
 	@Override
