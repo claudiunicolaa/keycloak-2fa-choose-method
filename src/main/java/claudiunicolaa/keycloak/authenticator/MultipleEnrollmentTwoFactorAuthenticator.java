@@ -86,7 +86,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 		String chosenMethod = context.getHttpRequest().getDecodedFormParameters().getFirst("method");
 		LOG.warn(String.format("***** chosenMethod: %s", chosenMethod));
 		if (chosenMethod == null) {
-			LOG.warn("***** chosenMethod validation 1");
+			LOG.error("The chosen method is equal with null. It should be a string value.");
 			context.failureChallenge(
 				AuthenticationFlowError.INTERNAL_ERROR,
 				context.form()
@@ -98,7 +98,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 		}
 
 		if (!AVAILABLE_METHODS.contains(chosenMethod)) {
-			LOG.warn("***** chosenMethod validation 2");
+			LOG.error(String.format("Chosen method: %s. Available methods: %s", chosenMethod, AVAILABLE_METHODS));
 			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
 				context.form()
 					.setAttribute("realm", context.getRealm())
