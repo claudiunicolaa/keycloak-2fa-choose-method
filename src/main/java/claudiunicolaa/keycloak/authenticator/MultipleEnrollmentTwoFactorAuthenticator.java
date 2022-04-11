@@ -73,9 +73,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 			// skip the authenticator if above conditions are not met
 			context.success();
 		} catch (Exception e) {
-			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
-				context.form().setError("error", e.getMessage())
-					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
+			throw new RuntimeException(e);
 		}
 	}
 
