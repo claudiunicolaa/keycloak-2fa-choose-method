@@ -10,6 +10,7 @@ import org.keycloak.models.*;
 
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,6 +43,11 @@ class TwoFactorAuthAttribute {
 			TwoFactorAuthAttribute.class
 		);
 	}
+
+	@Override
+	public String toString() {
+		return String.format("{\"required\":%b,\"type\":\"%s\"}", required, type);
+	}
 }
 
 /**
@@ -51,6 +57,8 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 	private static final String TPL_CODE = "multiple-enrollment.ftl";
 
+	private static final String USER_ATTRIBUTE_NAME = "two_factor_auth";
+
 	private static final List<String> AVAILABLE_METHODS = Arrays.asList("sms", "app");
 
 	private static final Logger LOG = Logger.getLogger(String.valueOf(MultipleEnrollmentTwoFactorAuthenticator.class));
@@ -59,7 +67,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 	public void authenticate(AuthenticationFlowContext context) {
 //		KeycloakSession session = context.getSession();
 		UserModel user = context.getUser();
-		String twoFactorAuthAttrRaw =  user.getFirstAttribute("two_factor_auth");
+		String twoFactorAuthAttrRaw =  user.getFirstAttribute(USER_ATTRIBUTE_NAME);
 		// skip the authenticator if the user attribute is not present
 		if (twoFactorAuthAttrRaw == null) {
 			context.success();
@@ -109,11 +117,16 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 
 		LOG.warn("***** user attribute update");
-		// @todo: save the chosen method in the user's attributes
 		UserModel user = context.getUser();
-		user.setAttribute("me", List.of(chosenMethod));
-
-		context.success();
+		String twoFactorAuthAttrRaw =  user.getFirstAttribute(USER_ATTRIBUTE_NAME);
+		try {
+			TwoFactorAuthAttribute userAttribute = TwoFactorAuthAttribute.FromRawJSON(twoFactorAuthAttrRaw);
+			userAttribute.setType(chosenMethod);
+			user.setAttribute(USER_ATTRIBUTE_NAME, Collections.singletonList(userAttribute.toString()));
+			context.success();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
