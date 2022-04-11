@@ -57,7 +57,6 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 //		KeycloakSession session = context.getSession();
 		UserModel user = context.getUser();
 		String twoFactorAuthAttrRaw =  user.getFirstAttribute("two_factor_auth");
-
 		try {
 			TwoFactorAuthAttribute userAttribute = TwoFactorAuthAttribute.FromRawJSON(twoFactorAuthAttrRaw);
 			// the two-factor authentication multiple enrollment form needs to be shown if the user has not enrolled yet
@@ -104,7 +103,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 	@Override
 	public boolean configuredFor(KeycloakSession session, RealmModel realm, UserModel user) {
-		return user.getFirstAttribute("two_factor_auth") != null;
+		return true;
 	}
 
 	@Override
