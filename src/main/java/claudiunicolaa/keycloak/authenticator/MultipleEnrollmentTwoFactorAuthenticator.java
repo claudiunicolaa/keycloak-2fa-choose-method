@@ -57,6 +57,11 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 //		KeycloakSession session = context.getSession();
 		UserModel user = context.getUser();
 		String twoFactorAuthAttrRaw =  user.getFirstAttribute("two_factor_auth");
+		// skip the authenticator if the user attribute is not present
+		if (twoFactorAuthAttrRaw == null) {
+			context.success();
+			return;
+		}
 		try {
 			TwoFactorAuthAttribute userAttribute = TwoFactorAuthAttribute.FromRawJSON(twoFactorAuthAttrRaw);
 			// the two-factor authentication multiple enrollment form needs to be shown if the user has not enrolled yet
