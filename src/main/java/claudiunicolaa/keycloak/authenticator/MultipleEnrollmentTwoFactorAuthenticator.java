@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 
 
-//@JsonIgnoreProperties(value = { "required" })
 class TwoFactorAuthAttribute {
 	String type;
 	Boolean required;
@@ -33,7 +32,6 @@ class TwoFactorAuthAttribute {
 
 	/**
 	 * Check if the two factor enrollment is needed.
-	 *
 	 * @return true if required=true and type is blank
 	 */
 	public Boolean enrollmentNeedsToBeMade() {
@@ -94,9 +92,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 	@Override
 	public void action(AuthenticationFlowContext context) {
-		LOG.warn("***** Start action");
 		String chosenMethod = context.getHttpRequest().getDecodedFormParameters().getFirst("method");
-		LOG.warn(String.format("***** chosenMethod: %s", chosenMethod));
 		if (chosenMethod == null) {
 			LOG.error("The chosen method is equal with null. It should be a string value.");
 			context.failureChallenge(
@@ -119,8 +115,6 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 			return;
 		}
 
-
-		LOG.warn("***** user attribute update");
 		UserModel user = context.getUser();
 		String twoFactorAuthAttrRaw =  user.getFirstAttribute(USER_ATTRIBUTE_NAME);
 		try {
@@ -132,6 +126,11 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 				user.addRequiredAction(UserModel.RequiredAction.CONFIGURE_TOTP);
 			}
 			context.success();
+			LOG.info(String.format(
+				"User id=%s has enrolled in the two-factor authentication with method=%s",
+				user.getId(),
+				chosenMethod
+			));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
