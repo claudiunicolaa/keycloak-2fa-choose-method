@@ -55,15 +55,15 @@ class TwoFactorAuthAttribute {
 /**
  * @author Claudiu Nicola, https://claudiunicola.xyz, @claudiunicolaa
  */
-public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
+public class TwoFactorChooseMethodAuthenticator implements Authenticator {
 
-	private static final String TPL_CODE = "multiple-enrollment.ftl";
+	private static final String TPL_CODE = "two-factor-choose-method.ftl";
 
 	private static final String USER_ATTRIBUTE_NAME = "two_factor_auth";
 
 	private static final List<String> AVAILABLE_METHODS = Arrays.asList("sms", "app");
 
-	private static final Logger LOG = Logger.getLogger(String.valueOf(MultipleEnrollmentTwoFactorAuthenticator.class));
+	private static final Logger LOG = Logger.getLogger(String.valueOf(TwoFactorChooseMethodAuthenticator.class));
 
 	@Override
 	public void authenticate(AuthenticationFlowContext context) {
@@ -77,7 +77,6 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 		}
 		try {
 			TwoFactorAuthAttribute userAttribute = TwoFactorAuthAttribute.FromRawJSON(twoFactorAuthAttrRaw);
-			// the two-factor authentication multiple enrollment form needs to be shown if the user has not enrolled yet
 			if (userAttribute.enrollmentNeedsToBeMade()) {
 				context.challenge(context.form().setAttribute("realm", context.getRealm()).createForm(TPL_CODE));
 				return;
@@ -99,7 +98,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 				AuthenticationFlowError.INTERNAL_ERROR,
 				context.form()
 					.setAttribute("realm", context.getRealm())
-					.setError("multipleEnrollmentAuthMethodInvalid")
+					.setError("twoFactorChooseMethodAuthMethodInvalid")
 					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR)
 			);
 			return;
@@ -110,7 +109,7 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
 				context.form()
 					.setAttribute("realm", context.getRealm())
-					.setError("multipleEnrollmentAuthMethodInvalid")
+					.setError("twoFactorChooseMethodAuthMethodInvalid")
 					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
 			return;
 		}

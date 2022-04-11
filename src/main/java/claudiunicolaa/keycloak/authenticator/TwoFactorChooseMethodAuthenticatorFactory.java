@@ -14,16 +14,16 @@ import java.util.List;
 /**
  * @author Claudiu Nicola, https://claudiunicola.xyz, @claudiunicolaa
  */
-public class MultipleEnrollmentTwoFactorAuthenticatorFactory implements AuthenticatorFactory {
+public class TwoFactorChooseMethodAuthenticatorFactory implements AuthenticatorFactory {
 
 	@Override
 	public String getId() {
-		return "multiple-enrl-2fa-authenticator";
+		return "2fa-choose-method-authenticator";
 	}
 
 	@Override
 	public String getDisplayType() {
-		return "Multiple Enrollment Two Factor Authentication";
+		return "Choose Two Factor Authentication method";
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class MultipleEnrollmentTwoFactorAuthenticatorFactory implements Authenti
 
 	@Override
 	public Authenticator create(KeycloakSession session) {
-		return new MultipleEnrollmentTwoFactorAuthenticator();
+		return new TwoFactorChooseMethodAuthenticator();
 	}
 
 	@Override

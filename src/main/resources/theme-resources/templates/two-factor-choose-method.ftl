@@ -1,9 +1,9 @@
 <#import "template.ftl" as layout>
 <@layout.registrationLayout displayInfo=true; section>
 	<#if section = "header">
-			${msg("multipleEnrollmentAuthTitle",realm.displayName)}
+			${msg("twoFactorAuthMethodAuthTitle",realm.displayName)}
 		<#elseif section = "form">
-			<form id="kc-multiple-enrollment-two-factor-auth-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
+			<form id="kc-two-factor-choose-method-auth-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
 				<div class="${properties.kcFormGroupClass!}">
 					<div class="${properties.kcLabelWrapperClass!}">
 						<label for="sms" class="${properties.kcLabelClass!}">SMS</label>
@@ -32,6 +32,6 @@
 				</div>
 			</form>
 		<#elseif section = "info" >
-			${msg("multipleEnrollmentAuthInstruction")}
+			${msg("twoFactorAuthMethodAuthInstruction")}
 	</#if>
 </@layout.registrationLayout>
