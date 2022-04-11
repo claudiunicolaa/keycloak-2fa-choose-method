@@ -27,6 +27,10 @@ class TwoFactorAuthAttribute {
 		this.type = type;
 	}
 
+	public boolean isAppType() {
+		return type.equals("app");
+	}
+
 	/**
 	 * Check if the two factor enrollment is needed.
 	 *
@@ -123,6 +127,10 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 			TwoFactorAuthAttribute userAttribute = TwoFactorAuthAttribute.FromRawJSON(twoFactorAuthAttrRaw);
 			userAttribute.setType(chosenMethod);
 			user.setAttribute(USER_ATTRIBUTE_NAME, Collections.singletonList(userAttribute.toString()));
+			// set CONFIGURE OTP as required user action if the chosen method is app
+			if (userAttribute.isAppType()) {
+				user.addRequiredAction(UserModel.RequiredAction.CONFIGURE_TOTP);
+			}
 			context.success();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
