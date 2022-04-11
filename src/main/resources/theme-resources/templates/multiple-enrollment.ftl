@@ -1,4 +1,5 @@
 <#import "template.ftl" as layout>
+<@layout.registrationLayout displayInfo=true; section>
 <#if section = "header">
 		${msg("multipleEnrollmentAuthTitle",realm.displayName)}
 	<#elseif section = "form">
@@ -33,3 +34,4 @@
 	<#elseif section = "info" >
 		${msg("multipleEnrollmentAuthInstruction")}
 	</#if>
+</@layout.registrationLayout>
