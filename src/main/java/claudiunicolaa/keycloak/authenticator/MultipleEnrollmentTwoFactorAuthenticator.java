@@ -2,6 +2,7 @@ package claudiunicolaa.keycloak.authenticator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jboss.logging.Logger;
 import org.keycloak.authentication.AuthenticationFlowContext;
 import org.keycloak.authentication.AuthenticationFlowError;
 import org.keycloak.authentication.Authenticator;
@@ -52,6 +53,8 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 	private static final List<String> AVAILABLE_METHODS = Arrays.asList("sms", "app");
 
+	private static final Logger LOG = Logger.getLogger(String.valueOf(MultipleEnrollmentTwoFactorAuthenticator.class));
+
 	@Override
 	public void authenticate(AuthenticationFlowContext context) {
 //		KeycloakSession session = context.getSession();
@@ -79,19 +82,33 @@ public class MultipleEnrollmentTwoFactorAuthenticator implements Authenticator {
 
 	@Override
 	public void action(AuthenticationFlowContext context) {
+		LOG.warn("***** Start action");
 		String chosenMethod = context.getHttpRequest().getDecodedFormParameters().getFirst("method");
+		LOG.warn(String.format("***** chosenMethod: %s", chosenMethod));
 		if (chosenMethod == null) {
-			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
-				context.form().createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
+			LOG.warn("***** chosenMethod validation 1");
+			context.failureChallenge(
+				AuthenticationFlowError.INTERNAL_ERROR,
+				context.form()
+					.setAttribute("realm", context.getRealm())
+					.setError("multipleEnrollmentAuthMethodInvalid")
+					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR)
+			);
 			return;
 		}
 
 		if (!AVAILABLE_METHODS.contains(chosenMethod)) {
+			LOG.warn("***** chosenMethod validation 2");
 			context.failureChallenge(AuthenticationFlowError.INTERNAL_ERROR,
-				context.form().createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
+				context.form()
+					.setAttribute("realm", context.getRealm())
+					.setError("multipleEnrollmentAuthMethodInvalid")
+					.createErrorPage(Response.Status.INTERNAL_SERVER_ERROR));
 			return;
 		}
 
+
+		LOG.warn("***** user attribute update");
 		// @todo: save the chosen method in the user's attributes
 		UserModel user = context.getUser();
 		user.setAttribute("me", List.of(chosenMethod));
