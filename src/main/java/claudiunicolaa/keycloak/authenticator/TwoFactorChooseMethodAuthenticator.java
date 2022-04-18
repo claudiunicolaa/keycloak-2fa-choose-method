@@ -67,7 +67,6 @@ public class TwoFactorChooseMethodAuthenticator implements Authenticator {
 
 	@Override
 	public void authenticate(AuthenticationFlowContext context) {
-//		KeycloakSession session = context.getSession();
 		UserModel user = context.getUser();
 		String twoFactorAuthAttrRaw =  user.getFirstAttribute(USER_ATTRIBUTE_NAME);
 		// skip the authenticator if the user attribute is not present
