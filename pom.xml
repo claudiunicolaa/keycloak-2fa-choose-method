@@ -62,27 +62,6 @@
 					<release>${java.version}</release>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-shade-plugin</artifactId>-->
-<!--				<version>${maven.shade.version}</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<phase>package</phase>-->
-<!--						<goals>-->
-<!--							<goal>shade</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<artifactSet>-->
-<!--								<includes>-->
-<!--									<include>software.amazon.awssdk:*</include>-->
-<!--									<include>org.reactivestreams:reactive-streams</include>-->
-<!--								</includes>-->
-<!--							</artifactSet>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
 		</plugins>
 	</build>
 
