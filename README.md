@@ -13,9 +13,8 @@ Displays a page where the user can choose their two-step authentication method. 
 The page is only displayed if the `two_factor_auth` attribute is set to user and `two_factor_auth.required` true.
 
 ### Configuration
-
-To be added:
-![alt text](https://i.ibb.co/mJQ5mSw/image-6.png)
-
+TODO
 
 ### Deployment
+## Docker
+TODO
